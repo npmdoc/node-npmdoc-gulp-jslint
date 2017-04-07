@@ -1,0 +1,140 @@
+<div class="apidocDiv">
+<style>
+/*csslint
+*/
+.apidocDiv {
+    background: #fff;
+    font-family: Arial, Helvetica, sans-serif;
+}
+.apidocDiv a[href] {
+    color: #33f;
+    font-weight: bold;
+    text-decoration: none;
+}
+.apidocDiv a[href]:hover {
+    text-decoration: underline;
+}
+.apidocCodeCommentSpan {
+    background: #bbf;
+    color: #000;
+    display: block;
+}
+.apidocCodeKeywordSpan {
+    color: #d00;
+    font-weight: bold;
+}
+.apidocCodePre {
+    background: #eef;
+    border: 1px solid;
+    color: #777;
+    padding: 5px;
+    white-space: pre-wrap;
+}
+.apidocFooterDiv {
+    margin-top: 20px;
+    text-align: center;
+}
+.apidocModuleLi {
+    margin-top: 10px;
+}
+.apidocSectionDiv {
+    border-top: 1px solid;
+    margin-top: 20px;
+}
+.apidocSignatureSpan {
+    color: #777;
+    font-weight: bold;
+}
+</style>
+<h1>api documentation for
+    <a
+
+        href="https://github.com/karimsa/gulp-jslint#readme"
+
+    >gulp-jslint (v1.0.10)</a>
+</h1>
+<h4>The classic and strict javascript lint-tool for gulp.js</h4>
+<div class="apidocSectionDiv"><a
+    href="#apidoc.tableOfContents"
+    id="apidoc.tableOfContents"
+><h1>table of contents</h1></a><ol>
+
+    <li class="apidocModuleLi"><a href="#apidoc.module.gulp-jslint">module gulp-jslint</a><ol>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.gulp-jslint.reporter">
+            function <span class="apidocSignatureSpan">gulp-jslint.</span>reporter
+            <span class="apidocSignatureSpan">(name, options)</span>
+            </a>
+
+        </li>
+
+    </ol></li>
+
+</ol></div>
+
+<div class="apidocSectionDiv">
+<h1><a href="#apidoc.module.gulp-jslint" id="apidoc.module.gulp-jslint">module gulp-jslint</a></h1>
+
+
+    <h2>
+        <a href="#apidoc.element.gulp-jslint.reporter" id="apidoc.element.gulp-jslint.reporter">
+        function <span class="apidocSignatureSpan">gulp-jslint.</span>reporter
+        <span class="apidocSignatureSpan">(name, options)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">reporter = function (name, options) {
+    options = options !== undefined ? options : {};
+    var reporter = name || &#x27;default&#x27;;
+
+    // if the report is a function, then it does not need any options
+    if (typeof reporter !== &#x27;function&#x27;) {
+        // if the given reporter is bundled with gulp-jslint,
+        // load it. otherwise, try to &#x27;require&#x27; the given reporter.
+        var createReporter = supported.hasOwnProperty(name) ? supported[name] : require(name);
+
+        // create a reporter with the given options object
+        reporter = createReporter(options);
+    }
+
+    // if the reporter is not a stream, wrap it with a map-stream
+    if (!(reporter instanceof Stream)) {
+        var stream = map(function (source, next) {
+            var value = reporter(fixIndex(source.jslint));
+            next(source.jslint.success ? null : new gutil.PluginError(&#x27;gulp-jslint&#x27;, &#x27;Failed to lint: &#x27; + source.path), value);
+        });
+        return stream;
+    }
+
+    // for stream reporters, just return
+    return reporter;
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+```javascript
+var gulp = require(&#x27;gulp&#x27;);
+var jslint = require(&#x27;gulp-jslint&#x27;);
+
+gulp.task(&#x27;default&#x27;, function () {
+    return gulp.src([&#x27;source.js&#x27;])
+            .pipe(jslint({ /* this object represents the JSLint directives being passed down */ }))
+            .pipe(jslint.<span class="apidocCodeKeywordSpan">reporter</span>( &#x27;my-reporter&#x27; ));
+});
+```
+
+If you would like to specify a custom jslint edition to use, set the property &#x27;edition&#x27; in your directives object.
+These versions should follow what the package node-jslint expects or this property can be set to a pre-loaded jslint
+function.
+...</pre></li>
+    </ul>
+
+
+</div>
+
+<div class="apidocFooterDiv">
+    [ this document was created with
+    <a href="https://github.com/kaizhu256/node-utility2" target="_blank">utility2</a>
+    ]
+</div>
+</div>
