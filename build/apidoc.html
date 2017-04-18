@@ -63,8 +63,48 @@
 
         <li>
 
+            <a class="apidocElementLiA" href="#apidoc.element.gulp-jslint.gulp-jslint">
+            function <span class="apidocSignatureSpan"></span>gulp-jslint
+            <span class="apidocSignatureSpan">(options)</span>
+            </a>
+
+        </li>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.gulp-jslint.lint">
+            function <span class="apidocSignatureSpan">gulp-jslint.</span>lint
+            <span class="apidocSignatureSpan">(options)</span>
+            </a>
+
+        </li>
+
+        <li>
+
             <a class="apidocElementLiA" href="#apidoc.element.gulp-jslint.reporter">
             function <span class="apidocSignatureSpan">gulp-jslint.</span>reporter
+            <span class="apidocSignatureSpan">(name, options)</span>
+            </a>
+
+        </li>
+
+    </ol></li>
+
+    <li class="apidocModuleLi"><a href="#apidoc.module.gulp-jslint.lint">module gulp-jslint.lint</a><ol>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.gulp-jslint.lint.lint">
+            function <span class="apidocSignatureSpan">gulp-jslint.</span>lint
+            <span class="apidocSignatureSpan">(options)</span>
+            </a>
+
+        </li>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.gulp-jslint.lint.reporter">
+            function <span class="apidocSignatureSpan">gulp-jslint.lint.</span>reporter
             <span class="apidocSignatureSpan">(name, options)</span>
             </a>
 
@@ -79,8 +119,360 @@
 
 
     <h2>
+        <a href="#apidoc.element.gulp-jslint.gulp-jslint" id="apidoc.element.gulp-jslint.gulp-jslint">
+        function <span class="apidocSignatureSpan"></span>gulp-jslint
+        <span class="apidocSignatureSpan">(options)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">gulp-jslint = function (options) {
+    // fallback to empty object
+    options = options || {};
+
+    // extend .jslintrc; give options
+    // the priority for directives
+    options = rc(&#x27;jslint&#x27;, options);
+
+    // use &#x27;global&#x27; for consistency prefer &#x27;predef&#x27; because of JSLint
+    options.predef = options.predef || options.global || [];
+
+    // freeze to user&#x27;s prefered edition or use latest
+    var edition = options.edition || &#x27;latest&#x27;;
+    options.edition = edition;
+
+    // remove edition functions from the options because
+    // node-jslint does not like it
+    if (typeof edition === &#x27;function&#x27;) {
+        delete options.edition;
+    }
+
+    // create a new lint stream
+    var lintStream = new LintStream(options);
+
+    // if instead of an edition string a function is provided,
+    // then we need to replace the jslint function in the stream
+    if (typeof edition === &#x27;function&#x27;) {
+        lintStream.JSlint = edition;
+    }
+
+    // map the incoming vinyl object to the object
+    // expected by the lint stream
+    var stream = map(function (data, next) {
+        var source = data.source;
+
+        // handle bad inputs
+        if (source.isNull() || source.isStream()) {
+            // send error on stream, but not on null
+            data.done(source.isStream() ? new PluginError(&#x27;gulp-jslint&#x27;, &#x27;Not sure how to handle stream as input file.&#x27;) : null);
+
+            // drop from lintable stream
+            return next();
+        }
+
+        // map over the data
+        next(null, {
+            file: data,
+            body: source.contents.toString(&#x27;utf8&#x27;)
+        });
+    });
+
+    // begin linting
+    stream.pipe(lintStream)
+
+        // map the lint stream results object back to the
+        // vinyl object expected by the reporter and rest
+        // of the gulp stream
+        .pipe(map(function (data, next) {
+            var source = data.file.source;
+
+            // map over the properties required by a lint reporter
+            source.jslint = {
+                filename: source.path,
+                success: data.linted.ok === true,
+                errors: data.linted.errors
+            };
+
+            // continue the stream process
+            next(null, source);
+            data.file.done();
+        }));
+
+    // create a gulp-able stream that allows for chunked linting
+    return map(function (source, next) {
+        stream.write({
+            source: source,
+            done: function (err) {
+                if (err) {
+                    next(err);
+                } else {
+                    next(null, source);
+                }
+            }
+        });
+    });
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    </ul>
+
+
+
+    <h2>
+        <a href="#apidoc.element.gulp-jslint.lint" id="apidoc.element.gulp-jslint.lint">
+        function <span class="apidocSignatureSpan">gulp-jslint.</span>lint
+        <span class="apidocSignatureSpan">(options)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">lint = function (options) {
+    // fallback to empty object
+    options = options || {};
+
+    // extend .jslintrc; give options
+    // the priority for directives
+    options = rc(&#x27;jslint&#x27;, options);
+
+    // use &#x27;global&#x27; for consistency prefer &#x27;predef&#x27; because of JSLint
+    options.predef = options.predef || options.global || [];
+
+    // freeze to user&#x27;s prefered edition or use latest
+    var edition = options.edition || &#x27;latest&#x27;;
+    options.edition = edition;
+
+    // remove edition functions from the options because
+    // node-jslint does not like it
+    if (typeof edition === &#x27;function&#x27;) {
+        delete options.edition;
+    }
+
+    // create a new lint stream
+    var lintStream = new LintStream(options);
+
+    // if instead of an edition string a function is provided,
+    // then we need to replace the jslint function in the stream
+    if (typeof edition === &#x27;function&#x27;) {
+        lintStream.JSlint = edition;
+    }
+
+    // map the incoming vinyl object to the object
+    // expected by the lint stream
+    var stream = map(function (data, next) {
+        var source = data.source;
+
+        // handle bad inputs
+        if (source.isNull() || source.isStream()) {
+            // send error on stream, but not on null
+            data.done(source.isStream() ? new PluginError(&#x27;gulp-jslint&#x27;, &#x27;Not sure how to handle stream as input file.&#x27;) : null);
+
+            // drop from lintable stream
+            return next();
+        }
+
+        // map over the data
+        next(null, {
+            file: data,
+            body: source.contents.toString(&#x27;utf8&#x27;)
+        });
+    });
+
+    // begin linting
+    stream.pipe(lintStream)
+
+        // map the lint stream results object back to the
+        // vinyl object expected by the reporter and rest
+        // of the gulp stream
+        .pipe(map(function (data, next) {
+            var source = data.file.source;
+
+            // map over the properties required by a lint reporter
+            source.jslint = {
+                filename: source.path,
+                success: data.linted.ok === true,
+                errors: data.linted.errors
+            };
+
+            // continue the stream process
+            next(null, source);
+            data.file.done();
+        }));
+
+    // create a gulp-able stream that allows for chunked linting
+    return map(function (source, next) {
+        stream.write({
+            source: source,
+            done: function (err) {
+                if (err) {
+                    next(err);
+                } else {
+                    next(null, source);
+                }
+            }
+        });
+    });
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    </ul>
+
+
+
+    <h2>
         <a href="#apidoc.element.gulp-jslint.reporter" id="apidoc.element.gulp-jslint.reporter">
         function <span class="apidocSignatureSpan">gulp-jslint.</span>reporter
+        <span class="apidocSignatureSpan">(name, options)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">reporter = function (name, options) {
+    options = options !== undefined ? options : {};
+    var reporter = name || &#x27;default&#x27;;
+
+    // if the report is a function, then it does not need any options
+    if (typeof reporter !== &#x27;function&#x27;) {
+        // if the given reporter is bundled with gulp-jslint,
+        // load it. otherwise, try to &#x27;require&#x27; the given reporter.
+        var createReporter = supported.hasOwnProperty(name) ? supported[name] : require(name);
+
+        // create a reporter with the given options object
+        reporter = createReporter(options);
+    }
+
+    // if the reporter is not a stream, wrap it with a map-stream
+    if (!(reporter instanceof Stream)) {
+        var stream = map(function (source, next) {
+            var value = reporter(fixIndex(source.jslint));
+            next(source.jslint.success ? null : new gutil.PluginError(&#x27;gulp-jslint&#x27;, &#x27;Failed to lint: &#x27; + source.path), value);
+        });
+        return stream;
+    }
+
+    // for stream reporters, just return
+    return reporter;
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+```javascript
+var gulp = require(&#x27;gulp&#x27;);
+var jslint = require(&#x27;gulp-jslint&#x27;);
+
+gulp.task(&#x27;default&#x27;, function () {
+    return gulp.src([&#x27;source.js&#x27;])
+            .pipe(jslint({ /* this object represents the JSLint directives being passed down */ }))
+            .pipe(jslint.<span class="apidocCodeKeywordSpan">reporter</span>( &#x27;my-reporter&#x27; ));
+});
+```
+
+If you would like to specify a custom jslint edition to use, set the property &#x27;edition&#x27; in your directives object.
+These versions should follow what the package node-jslint expects or this property can be set to a pre-loaded jslint
+function.
+...</pre></li>
+    </ul>
+
+
+</div>
+
+<div class="apidocSectionDiv">
+<h1><a href="#apidoc.module.gulp-jslint.lint" id="apidoc.module.gulp-jslint.lint">module gulp-jslint.lint</a></h1>
+
+
+    <h2>
+        <a href="#apidoc.element.gulp-jslint.lint.lint" id="apidoc.element.gulp-jslint.lint.lint">
+        function <span class="apidocSignatureSpan">gulp-jslint.</span>lint
+        <span class="apidocSignatureSpan">(options)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">lint = function (options) {
+    // fallback to empty object
+    options = options || {};
+
+    // extend .jslintrc; give options
+    // the priority for directives
+    options = rc(&#x27;jslint&#x27;, options);
+
+    // use &#x27;global&#x27; for consistency prefer &#x27;predef&#x27; because of JSLint
+    options.predef = options.predef || options.global || [];
+
+    // freeze to user&#x27;s prefered edition or use latest
+    var edition = options.edition || &#x27;latest&#x27;;
+    options.edition = edition;
+
+    // remove edition functions from the options because
+    // node-jslint does not like it
+    if (typeof edition === &#x27;function&#x27;) {
+        delete options.edition;
+    }
+
+    // create a new lint stream
+    var lintStream = new LintStream(options);
+
+    // if instead of an edition string a function is provided,
+    // then we need to replace the jslint function in the stream
+    if (typeof edition === &#x27;function&#x27;) {
+        lintStream.JSlint = edition;
+    }
+
+    // map the incoming vinyl object to the object
+    // expected by the lint stream
+    var stream = map(function (data, next) {
+        var source = data.source;
+
+        // handle bad inputs
+        if (source.isNull() || source.isStream()) {
+            // send error on stream, but not on null
+            data.done(source.isStream() ? new PluginError(&#x27;gulp-jslint&#x27;, &#x27;Not sure how to handle stream as input file.&#x27;) : null);
+
+            // drop from lintable stream
+            return next();
+        }
+
+        // map over the data
+        next(null, {
+            file: data,
+            body: source.contents.toString(&#x27;utf8&#x27;)
+        });
+    });
+
+    // begin linting
+    stream.pipe(lintStream)
+
+        // map the lint stream results object back to the
+        // vinyl object expected by the reporter and rest
+        // of the gulp stream
+        .pipe(map(function (data, next) {
+            var source = data.file.source;
+
+            // map over the properties required by a lint reporter
+            source.jslint = {
+                filename: source.path,
+                success: data.linted.ok === true,
+                errors: data.linted.errors
+            };
+
+            // continue the stream process
+            next(null, source);
+            data.file.done();
+        }));
+
+    // create a gulp-able stream that allows for chunked linting
+    return map(function (source, next) {
+        stream.write({
+            source: source,
+            done: function (err) {
+                if (err) {
+                    next(err);
+                } else {
+                    next(null, source);
+                }
+            }
+        });
+    });
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    </ul>
+
+
+
+    <h2>
+        <a href="#apidoc.element.gulp-jslint.lint.reporter" id="apidoc.element.gulp-jslint.lint.reporter">
+        function <span class="apidocSignatureSpan">gulp-jslint.lint.</span>reporter
         <span class="apidocSignatureSpan">(name, options)</span>
         </a>
     </h2>

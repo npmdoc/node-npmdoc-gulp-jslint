@@ -1,4 +1,4 @@
-<div class="apidocDiv">
+<html><head></head><body><div class="apidocDiv">
 <style>
 /*csslint
 */
@@ -47,17 +47,10 @@
 }
 </style>
 <h1>api documentation for
-    <a
-
-        href="https://github.com/karimsa/gulp-jslint#readme"
-
-    >gulp-jslint (v1.0.10)</a>
+    <a href="https://github.com/karimsa/gulp-jslint#readme">gulp-jslint (v1.0.10)</a>
 </h1>
 <h4>The classic and strict javascript lint-tool for gulp.js</h4>
-<div class="apidocSectionDiv"><a
-    href="#apidoc.tableOfContents"
-    id="apidoc.tableOfContents"
-><h1>table of contents</h1></a><ol>
+<div class="apidocSectionDiv"><a href="#apidoc.tableOfContents" id="apidoc.tableOfContents"><h1>table of contents</h1></a><ol>
 
     <li class="apidocModuleLi"><a href="#apidoc.module.gulp-jslint">module gulp-jslint</a><ol>
 
@@ -131,18 +124,18 @@
 
     // extend .jslintrc; give options
     // the priority for directives
-    options = rc(&#x27;jslint&#x27;, options);
+    options = rc('jslint', options);
 
-    // use &#x27;global&#x27; for consistency prefer &#x27;predef&#x27; because of JSLint
+    // use 'global' for consistency prefer 'predef' because of JSLint
     options.predef = options.predef || options.global || [];
 
-    // freeze to user&#x27;s prefered edition or use latest
-    var edition = options.edition || &#x27;latest&#x27;;
+    // freeze to user's prefered edition or use latest
+    var edition = options.edition || 'latest';
     options.edition = edition;
 
     // remove edition functions from the options because
     // node-jslint does not like it
-    if (typeof edition === &#x27;function&#x27;) {
+    if (typeof edition === 'function') {
         delete options.edition;
     }
 
@@ -151,7 +144,7 @@
 
     // if instead of an edition string a function is provided,
     // then we need to replace the jslint function in the stream
-    if (typeof edition === &#x27;function&#x27;) {
+    if (typeof edition === 'function') {
         lintStream.JSlint = edition;
     }
 
@@ -163,7 +156,7 @@
         // handle bad inputs
         if (source.isNull() || source.isStream()) {
             // send error on stream, but not on null
-            data.done(source.isStream() ? new PluginError(&#x27;gulp-jslint&#x27;, &#x27;Not sure how to handle stream as input file.&#x27;) : null);
+            data.done(source.isStream() ? new PluginError('gulp-jslint', 'Not sure how to handle stream as input file.') : null);
 
             // drop from lintable stream
             return next();
@@ -172,7 +165,7 @@
         // map over the data
         next(null, {
             file: data,
-            body: source.contents.toString(&#x27;utf8&#x27;)
+            body: source.contents.toString('utf8')
         });
     });
 
@@ -229,18 +222,18 @@
 
     // extend .jslintrc; give options
     // the priority for directives
-    options = rc(&#x27;jslint&#x27;, options);
+    options = rc('jslint', options);
 
-    // use &#x27;global&#x27; for consistency prefer &#x27;predef&#x27; because of JSLint
+    // use 'global' for consistency prefer 'predef' because of JSLint
     options.predef = options.predef || options.global || [];
 
-    // freeze to user&#x27;s prefered edition or use latest
-    var edition = options.edition || &#x27;latest&#x27;;
+    // freeze to user's prefered edition or use latest
+    var edition = options.edition || 'latest';
     options.edition = edition;
 
     // remove edition functions from the options because
     // node-jslint does not like it
-    if (typeof edition === &#x27;function&#x27;) {
+    if (typeof edition === 'function') {
         delete options.edition;
     }
 
@@ -249,7 +242,7 @@
 
     // if instead of an edition string a function is provided,
     // then we need to replace the jslint function in the stream
-    if (typeof edition === &#x27;function&#x27;) {
+    if (typeof edition === 'function') {
         lintStream.JSlint = edition;
     }
 
@@ -261,7 +254,7 @@
         // handle bad inputs
         if (source.isNull() || source.isStream()) {
             // send error on stream, but not on null
-            data.done(source.isStream() ? new PluginError(&#x27;gulp-jslint&#x27;, &#x27;Not sure how to handle stream as input file.&#x27;) : null);
+            data.done(source.isStream() ? new PluginError('gulp-jslint', 'Not sure how to handle stream as input file.') : null);
 
             // drop from lintable stream
             return next();
@@ -270,7 +263,7 @@
         // map over the data
         next(null, {
             file: data,
-            body: source.contents.toString(&#x27;utf8&#x27;)
+            body: source.contents.toString('utf8')
         });
     });
 
@@ -323,12 +316,12 @@
     <ul>
     <li>description and source-code<pre class="apidocCodePre">reporter = function (name, options) {
     options = options !== undefined ? options : {};
-    var reporter = name || &#x27;default&#x27;;
+    var reporter = name || 'default';
 
     // if the report is a function, then it does not need any options
-    if (typeof reporter !== &#x27;function&#x27;) {
+    if (typeof reporter !== 'function') {
         // if the given reporter is bundled with gulp-jslint,
-        // load it. otherwise, try to &#x27;require&#x27; the given reporter.
+        // load it. otherwise, try to 'require' the given reporter.
         var createReporter = supported.hasOwnProperty(name) ? supported[name] : require(name);
 
         // create a reporter with the given options object
@@ -339,7 +332,7 @@
     if (!(reporter instanceof Stream)) {
         var stream = map(function (source, next) {
             var value = reporter(fixIndex(source.jslint));
-            next(source.jslint.success ? null : new gutil.PluginError(&#x27;gulp-jslint&#x27;, &#x27;Failed to lint: &#x27; + source.path), value);
+            next(source.jslint.success ? null : new gutil.PluginError('gulp-jslint', 'Failed to lint: ' + source.path), value);
         });
         return stream;
     }
@@ -349,17 +342,17 @@
 }</pre></li>
     <li>example usage<pre class="apidocCodePre">...
 ```javascript
-var gulp = require(&#x27;gulp&#x27;);
-var jslint = require(&#x27;gulp-jslint&#x27;);
+var gulp = require('gulp');
+var jslint = require('gulp-jslint');
 
-gulp.task(&#x27;default&#x27;, function () {
-    return gulp.src([&#x27;source.js&#x27;])
+gulp.task('default', function () {
+    return gulp.src(['source.js'])
             .pipe(jslint({ /* this object represents the JSLint directives being passed down */ }))
-            .pipe(jslint.<span class="apidocCodeKeywordSpan">reporter</span>( &#x27;my-reporter&#x27; ));
+            .pipe(jslint.<span class="apidocCodeKeywordSpan">reporter</span>( 'my-reporter' ));
 });
 ```
 
-If you would like to specify a custom jslint edition to use, set the property &#x27;edition&#x27; in your directives object.
+If you would like to specify a custom jslint edition to use, set the property 'edition' in your directives object.
 These versions should follow what the package node-jslint expects or this property can be set to a pre-loaded jslint
 function.
 ...</pre></li>
@@ -385,18 +378,18 @@ function.
 
     // extend .jslintrc; give options
     // the priority for directives
-    options = rc(&#x27;jslint&#x27;, options);
+    options = rc('jslint', options);
 
-    // use &#x27;global&#x27; for consistency prefer &#x27;predef&#x27; because of JSLint
+    // use 'global' for consistency prefer 'predef' because of JSLint
     options.predef = options.predef || options.global || [];
 
-    // freeze to user&#x27;s prefered edition or use latest
-    var edition = options.edition || &#x27;latest&#x27;;
+    // freeze to user's prefered edition or use latest
+    var edition = options.edition || 'latest';
     options.edition = edition;
 
     // remove edition functions from the options because
     // node-jslint does not like it
-    if (typeof edition === &#x27;function&#x27;) {
+    if (typeof edition === 'function') {
         delete options.edition;
     }
 
@@ -405,7 +398,7 @@ function.
 
     // if instead of an edition string a function is provided,
     // then we need to replace the jslint function in the stream
-    if (typeof edition === &#x27;function&#x27;) {
+    if (typeof edition === 'function') {
         lintStream.JSlint = edition;
     }
 
@@ -417,7 +410,7 @@ function.
         // handle bad inputs
         if (source.isNull() || source.isStream()) {
             // send error on stream, but not on null
-            data.done(source.isStream() ? new PluginError(&#x27;gulp-jslint&#x27;, &#x27;Not sure how to handle stream as input file.&#x27;) : null);
+            data.done(source.isStream() ? new PluginError('gulp-jslint', 'Not sure how to handle stream as input file.') : null);
 
             // drop from lintable stream
             return next();
@@ -426,7 +419,7 @@ function.
         // map over the data
         next(null, {
             file: data,
-            body: source.contents.toString(&#x27;utf8&#x27;)
+            body: source.contents.toString('utf8')
         });
     });
 
@@ -479,12 +472,12 @@ function.
     <ul>
     <li>description and source-code<pre class="apidocCodePre">reporter = function (name, options) {
     options = options !== undefined ? options : {};
-    var reporter = name || &#x27;default&#x27;;
+    var reporter = name || 'default';
 
     // if the report is a function, then it does not need any options
-    if (typeof reporter !== &#x27;function&#x27;) {
+    if (typeof reporter !== 'function') {
         // if the given reporter is bundled with gulp-jslint,
-        // load it. otherwise, try to &#x27;require&#x27; the given reporter.
+        // load it. otherwise, try to 'require' the given reporter.
         var createReporter = supported.hasOwnProperty(name) ? supported[name] : require(name);
 
         // create a reporter with the given options object
@@ -495,7 +488,7 @@ function.
     if (!(reporter instanceof Stream)) {
         var stream = map(function (source, next) {
             var value = reporter(fixIndex(source.jslint));
-            next(source.jslint.success ? null : new gutil.PluginError(&#x27;gulp-jslint&#x27;, &#x27;Failed to lint: &#x27; + source.path), value);
+            next(source.jslint.success ? null : new gutil.PluginError('gulp-jslint', 'Failed to lint: ' + source.path), value);
         });
         return stream;
     }
@@ -505,17 +498,17 @@ function.
 }</pre></li>
     <li>example usage<pre class="apidocCodePre">...
 ```javascript
-var gulp = require(&#x27;gulp&#x27;);
-var jslint = require(&#x27;gulp-jslint&#x27;);
+var gulp = require('gulp');
+var jslint = require('gulp-jslint');
 
-gulp.task(&#x27;default&#x27;, function () {
-    return gulp.src([&#x27;source.js&#x27;])
+gulp.task('default', function () {
+    return gulp.src(['source.js'])
             .pipe(jslint({ /* this object represents the JSLint directives being passed down */ }))
-            .pipe(jslint.<span class="apidocCodeKeywordSpan">reporter</span>( &#x27;my-reporter&#x27; ));
+            .pipe(jslint.<span class="apidocCodeKeywordSpan">reporter</span>( 'my-reporter' ));
 });
 ```
 
-If you would like to specify a custom jslint edition to use, set the property &#x27;edition&#x27; in your directives object.
+If you would like to specify a custom jslint edition to use, set the property 'edition' in your directives object.
 These versions should follow what the package node-jslint expects or this property can be set to a pre-loaded jslint
 function.
 ...</pre></li>
@@ -530,3 +523,4 @@ function.
     ]
 </div>
 </div>
+</body></html>
