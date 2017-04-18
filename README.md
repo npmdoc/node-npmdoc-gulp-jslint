@@ -1,9 +1,14 @@
-# api documentation for  [gulp-jslint (v1.0.10)](https://github.com/karimsa/gulp-jslint#readme)  [![npm package](https://img.shields.io/npm/v/npmdoc-gulp-jslint.svg?style=flat-square)](https://www.npmjs.org/package/npmdoc-gulp-jslint) [![travis-ci.org build-status](https://api.travis-ci.org/npmdoc/node-npmdoc-gulp-jslint.svg)](https://travis-ci.org/npmdoc/node-npmdoc-gulp-jslint)
+# npmdoc-gulp-jslint
+
+#### api documentation for  [gulp-jslint (v1.0.10)](https://github.com/karimsa/gulp-jslint#readme)  [![npm package](https://img.shields.io/npm/v/npmdoc-gulp-jslint.svg?style=flat-square)](https://www.npmjs.org/package/npmdoc-gulp-jslint) [![travis-ci.org build-status](https://api.travis-ci.org/npmdoc/node-npmdoc-gulp-jslint.svg)](https://travis-ci.org/npmdoc/node-npmdoc-gulp-jslint)
+
 #### The classic and strict javascript lint-tool for gulp.js
 
-[![NPM](https://nodei.co/npm/gulp-jslint.png?downloads=true)](https://www.npmjs.com/package/gulp-jslint)
+[![NPM](https://nodei.co/npm/gulp-jslint.png?downloads=true&downloadRank=true&stars=true)](https://www.npmjs.com/package/gulp-jslint)
 
-[![apidoc](https://npmdoc.github.io/node-npmdoc-gulp-jslint/build/screenCapture.buildNpmdoc.browser._2Fhome_2Ftravis_2Fbuild_2Fnpmdoc_2Fnode-npmdoc-gulp-jslint_2Ftmp_2Fbuild_2Fapidoc.html.png)](https://npmdoc.github.io/node-npmdoc-gulp-jslint/build/apidoc.html)
+- [https://npmdoc.github.io/node-npmdoc-gulp-jslint/build/apidoc.html](https://npmdoc.github.io/node-npmdoc-gulp-jslint/build/apidoc.html)
+
+[![apidoc](https://npmdoc.github.io/node-npmdoc-gulp-jslint/build/screenCapture.buildCi.browser.%252Ftmp%252Fbuild%252Fapidoc.html.png)](https://npmdoc.github.io/node-npmdoc-gulp-jslint/build/apidoc.html)
 
 ![npmPackageListing](https://npmdoc.github.io/node-npmdoc-gulp-jslint/build/screenCapture.npmPackageListing.svg)
 
@@ -58,13 +63,11 @@
     "main": "index.js",
     "maintainers": [
         {
-            "name": "karimsa",
-            "email": "k4rim.sa@gmail.com"
+            "name": "karimsa"
         }
     ],
     "name": "gulp-jslint",
     "optionalDependencies": {},
-    "readme": "ERROR: No README data found!",
     "repository": {
         "type": "git",
         "url": "git://github.com/karimsa/gulp-jslint.git"
@@ -78,67 +81,6 @@
     },
     "version": "1.0.10"
 }
-```
-
-
-
-# <a name="apidoc.tableOfContents"></a>[table of contents](#apidoc.tableOfContents)
-
-#### [module gulp-jslint](#apidoc.module.gulp-jslint)
-1.  [function <span class="apidocSignatureSpan">gulp-jslint.</span>reporter (name, options)](#apidoc.element.gulp-jslint.reporter)
-
-
-
-# <a name="apidoc.module.gulp-jslint"></a>[module gulp-jslint](#apidoc.module.gulp-jslint)
-
-#### <a name="apidoc.element.gulp-jslint.reporter"></a>[function <span class="apidocSignatureSpan">gulp-jslint.</span>reporter (name, options)](#apidoc.element.gulp-jslint.reporter)
-- description and source-code
-```javascript
-reporter = function (name, options) {
-    options = options !== undefined ? options : {};
-    var reporter = name || 'default';
-
-    // if the report is a function, then it does not need any options
-    if (typeof reporter !== 'function') {
-        // if the given reporter is bundled with gulp-jslint,
-        // load it. otherwise, try to 'require' the given reporter.
-        var createReporter = supported.hasOwnProperty(name) ? supported[name] : require(name);
-
-        // create a reporter with the given options object
-        reporter = createReporter(options);
-    }
-
-    // if the reporter is not a stream, wrap it with a map-stream
-    if (!(reporter instanceof Stream)) {
-        var stream = map(function (source, next) {
-            var value = reporter(fixIndex(source.jslint));
-            next(source.jslint.success ? null : new gutil.PluginError('gulp-jslint', 'Failed to lint: ' + source.path), value);
-        });
-        return stream;
-    }
-
-    // for stream reporters, just return
-    return reporter;
-}
-```
-- example usage
-```shell
-...
-'''javascript
-var gulp = require('gulp');
-var jslint = require('gulp-jslint');
-
-gulp.task('default', function () {
-    return gulp.src(['source.js'])
-            .pipe(jslint({ /* this object represents the JSLint directives being passed down */ }))
-            .pipe(jslint.reporter( 'my-reporter' ));
-});
-'''
-
-If you would like to specify a custom jslint edition to use, set the property 'edition' in your directives object.
-These versions should follow what the package node-jslint expects or this property can be set to a pre-loaded jslint
-function.
-...
 ```
 
 
